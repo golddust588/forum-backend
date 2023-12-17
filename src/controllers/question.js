@@ -13,6 +13,7 @@ const INSERT_QUESTION = async (req, res) => {
     const formattedDate = year + "-" + month + "-" + day;
 
     const question = new QuestionModel({
+      question_title: req.body.question_title,
       question_text: req.body.question_text,
       date: formattedDate,
       user_id: req.body.userId,
@@ -39,4 +40,29 @@ const GET_ALL_QUESTIONS = async (req, res) => {
   }
 };
 
-export { INSERT_QUESTION, GET_ALL_QUESTIONS };
+const DELETE_QUESTION = async (req, res) => {
+  try {
+    const question = await QuestionModel.findById(req.params.id);
+
+    if (!question) {
+      return res.status(404).json({ message: "Question not found" });
+    }
+
+    if (req.body.userId === question.user_id) {
+      const response = await QuestionModel.deleteOne({ _id: req.params.id });
+      return res.status(200).json({ response: response });
+    } else {
+      return res
+        .status(403)
+        .json({
+          message:
+            "Unauthorized: User does not have permission to delete this question",
+        });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export { INSERT_QUESTION, GET_ALL_QUESTIONS, DELETE_QUESTION };
