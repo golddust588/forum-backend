@@ -29,4 +29,40 @@ const INSERT_ANSWER = async (req, res) => {
   }
 };
 
-export { INSERT_ANSWER };
+const GET_ALL_QUESTION_ANSWERS = async (req, res) => {
+  try {
+    const answers = await AnswerModel.find({ question_id: req.params.id }).sort(
+      { date: "asc" }
+    );
+
+    return res.status(200).json({ answers: answers });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+const DELETE_ANSWER = async (req, res) => {
+  try {
+    const answer = await AnswerModel.findById(req.params.id);
+
+    if (!answer) {
+      return res.status(404).json({ message: "Answer not found" });
+    }
+
+    if (req.body.userId === answer.user_id) {
+      const response = await AnswerModel.deleteOne({ _id: req.params.id });
+      return res.status(200).json({ response: response });
+    } else {
+      return res.status(403).json({
+        message:
+          "Unauthorized: User does not have permission to delete this answer",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export { INSERT_ANSWER, GET_ALL_QUESTION_ANSWERS, DELETE_ANSWER };
