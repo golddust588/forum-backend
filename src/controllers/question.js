@@ -29,4 +29,14 @@ const INSERT_QUESTION = async (req, res) => {
   }
 };
 
-export { INSERT_QUESTION };
+const GET_ALL_QUESTIONS = async (req, res) => {
+  try {
+    const questions = await QuestionModel.find().sort({ date: "asc" });
+    return res.status(201).json({ questions: questions });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export { INSERT_QUESTION, GET_ALL_QUESTIONS };
