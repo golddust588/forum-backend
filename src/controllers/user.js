@@ -35,6 +35,8 @@ const REGISTER_USER = async (req, res) => {
 
     return res.status(200).json({
       status: "User registered",
+      name: user.name,
+      user_id: user._id,
       response: response,
       jwt_token: jwt_token,
       jwt_refresh_token: jwt_refresh_token,
@@ -73,6 +75,8 @@ const LOGIN = async (req, res) => {
 
     return res.status(200).json({
       message: "Login successful",
+      name: user.name,
+      user_id: user._id,
       jwt_token: jwt_token,
       jwt_refresh_token: jwt_refresh_token,
     });
