@@ -22,7 +22,7 @@ const REGISTER_USER = async (req, res) => {
     const jwt_token = jwt.sign(
       { email: user.email, userId: user._id },
       process.env.JWT_SECRET,
-      { expiresIn: "2h" },
+      { expiresIn: "24h" },
       { algorithm: "RS256" }
     );
 

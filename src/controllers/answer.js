@@ -1,4 +1,5 @@
 import AnswerModel from "../models/answer.js";
+import QuestionModel from "../models/question.js";
 
 const INSERT_ANSWER = async (req, res) => {
   try {
@@ -25,6 +26,13 @@ const INSERT_ANSWER = async (req, res) => {
     });
 
     const response = await answer.save();
+
+    answer.id = answer._id;
+
+    const question = await QuestionModel.findOne({ _id: req.params.id });
+
+    question.answers.push(answer.id);
+    await question.save();
 
     return res.status(201).json({ response: response });
   } catch (err) {
@@ -56,6 +64,15 @@ const DELETE_ANSWER = async (req, res) => {
 
     if (req.body.userId === answer.user_id) {
       const response = await AnswerModel.deleteOne({ _id: req.params.id });
+
+      answer.id = answer._id;
+      const question = await QuestionModel.findOne({ _id: answer.question_id });
+      console.log(question);
+      question.answers = question.answers.filter(
+        (answerId) => answerId !== answer.id
+      );
+      await question.save();
+
       return res.status(200).json({ response: response });
     } else {
       return res.status(403).json({

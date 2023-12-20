@@ -8,7 +8,7 @@ import {
 
 const router = express.Router();
 
-router.get("/question/:id/answers", auth, GET_ALL_QUESTION_ANSWERS);
+router.get("/question/:id/answers", GET_ALL_QUESTION_ANSWERS);
 router.post("/question/:id/answers", auth, INSERT_ANSWER);
 router.delete("/answer/:id", auth, DELETE_ANSWER);
 

@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get("/questions", GET_ALL_QUESTIONS);
 router.get("/questions/:id", GET_QUESTION_BY_ID);
-router.get("/questions/:userId", auth, GET_ALL_USER_QUESTIONS);
+router.get("/questions/users/:userId", auth, GET_ALL_USER_QUESTIONS);
 router.post("/question", auth, INSERT_QUESTION);
 router.delete("/question/:id", auth, DELETE_QUESTION);
 

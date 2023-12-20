@@ -7,6 +7,7 @@ const questionSchema = mongoose.Schema({
   gained_likes_number: { type: Number, required: true },
   id: { type: String },
   user_id: { type: String, required: true },
+  answers: { type: Array, required: true },
 });
 
 export default mongoose.model("Question", questionSchema);
