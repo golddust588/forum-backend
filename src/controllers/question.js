@@ -95,10 +95,46 @@ const DELETE_QUESTION = async (req, res) => {
   }
 };
 
+const UPVOTE_QUESTION = async (req, res) => {
+  try {
+    const question = await QuestionModel.findById(req.params.id);
+    question.gained_likes_number += 1;
+
+    const response = await question.save();
+
+    res.status(200).json({
+      message: response,
+      gained_likes_number: question.gained_likes_number,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+const DOWNVOTE_QUESTION = async (req, res) => {
+  try {
+    const question = await QuestionModel.findById(req.params.id);
+    question.gained_likes_number -= 1;
+
+    const response = await question.save();
+
+    res.status(200).json({
+      message: response,
+      gained_likes_number: question.gained_likes_number,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
 export {
   INSERT_QUESTION,
   GET_ALL_QUESTIONS,
   GET_ALL_USER_QUESTIONS,
   GET_QUESTION_BY_ID,
   DELETE_QUESTION,
+  UPVOTE_QUESTION,
+  DOWNVOTE_QUESTION,
 };
