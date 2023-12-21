@@ -4,6 +4,12 @@ import jwt from "jsonwebtoken";
 
 const REGISTER_USER = async (req, res) => {
   try {
+    const existingUser = await UserModel.findOne({ email: req.body.email });
+
+    if (existingUser) {
+      return res.status(400).json({ status: "Email already exists" });
+    }
+
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
 
@@ -22,7 +28,7 @@ const REGISTER_USER = async (req, res) => {
     const jwt_token = jwt.sign(
       { email: user.email, userId: user._id },
       process.env.JWT_SECRET,
-      { expiresIn: "24h" },
+      { expiresIn: "12h" },
       { algorithm: "RS256" }
     );
 
@@ -33,7 +39,7 @@ const REGISTER_USER = async (req, res) => {
       { algorithm: "RS256" }
     );
 
-    return res.status(200).json({
+    return res.status(201).json({
       status: "User registered",
       name: user.name,
       user_id: user._id,

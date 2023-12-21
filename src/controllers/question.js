@@ -24,8 +24,6 @@ const INSERT_QUESTION = async (req, res) => {
       user_id: req.body.userId,
     });
 
-    // ticket.id = ticket._id;
-
     const response = await question.save();
 
     return res.status(201).json({ response: response });
@@ -38,7 +36,7 @@ const INSERT_QUESTION = async (req, res) => {
 const GET_ALL_QUESTIONS = async (req, res) => {
   try {
     const questions = await QuestionModel.find().sort({ date: -1 });
-    return res.status(201).json({ questions: questions });
+    return res.status(200).json({ questions: questions });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Something went wrong" });
@@ -50,7 +48,7 @@ const GET_ALL_USER_QUESTIONS = async (req, res) => {
     const questions = await QuestionModel.find({
       user_id: req.params.userId,
     }).sort({ date: -1 });
-    return res.status(201).json({ questions: questions });
+    return res.status(200).json({ questions: questions });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Something went wrong" });
